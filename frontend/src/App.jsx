@@ -6,6 +6,7 @@ import Signup from "./pages/signup/Signup.jsx";
 import Dashboard from "./dashboard/Dashboard.jsx";
 import AllCoursesView from "./pages/AllCoursesView.jsx";
 import "./dashboard/Dashboard.css";
+import DeckPage from "./pages/DeckPage.jsx"
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Route path="/signup" element={<Signup />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/dashboard/courses" element={<AllCoursesView />} />
+      <Route path="/pages/deckpage" element={<DeckPage />} />
     </Routes>
   );
 }

@@ -18,7 +18,7 @@ const Dashboard = () => {
         <nav className="sidebar">
           <button className="menu-item">Home</button>
           <button className="menu-item">Create</button>
-          <button className="menu-item">Library</button>
+          <button className="menu-item" onClick={()=> navigate("/pages/deckpage")}>Library</button>
         </nav>
 
         {/* Main Content */}
