@@ -4,15 +4,17 @@ import Homepage from "./homepage/Homepage.jsx";
 import Signin from "./pages/signin/Signin.jsx";
 import Signup from "./pages/signup/Signup.jsx";
 import Dashboard from "./dashboard/Dashboard.jsx";
-
+import AllCoursesView from "./pages/AllCoursesView.jsx";
+import "./dashboard/Dashboard.css";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Homepage />} />
       <Route path="/signin" element={<Signin />} />
-       <Route path="/signup" element={<Signup />} />
+      <Route path="/signup" element={<Signup />} />
       <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard/courses" element={<AllCoursesView />} />
     </Routes>
   );
 }

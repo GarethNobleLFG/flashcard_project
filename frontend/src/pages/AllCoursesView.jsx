@@ -3,7 +3,7 @@ Latest Update: 10/12/25
 Description: AllCoursesView component to display and manage all courses.
 */
 import { Link } from "react-router-dom";
-import "../styles/Dashboard.css";
+import "../dashboard/Dashboard.css";
 import { useState } from "react";
 
 function AllCoursesView() {
