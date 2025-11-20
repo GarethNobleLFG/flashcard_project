@@ -169,7 +169,6 @@ function DeckPage() {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 });
-                console.log("📡 Response status:", response.status);
 
 
                 if (response.ok) {
@@ -186,7 +185,6 @@ function DeckPage() {
 
 
             } catch (error) {
-                console.log("❌ Backend error message:", data.message);
                 console.error('Error loading cards:', error);
             }
         };
@@ -199,8 +197,6 @@ function DeckPage() {
 
 
     const handleAdd = async () => {
-        console.log("Current user:", currentUser); // Add this debug line
-        console.log("User email:", currentUser?.email); // Add this debug line
 
         if (!currentUser?.email) {
             alert("Please log in to add cards");
@@ -209,7 +205,6 @@ function DeckPage() {
 
         try {
             const requestBody = { qSide: formValues.front, aSide: formValues.back, userEmail: currentUser?.email, deckID: deckId };
-            console.log("Request body:", requestBody); // Add this line
 
             const response = await fetch('http://localhost:5000/api/cards', {
                 method: 'POST',
@@ -217,13 +212,8 @@ function DeckPage() {
                 body: JSON.stringify({ qSide: formValues.front, aSide: formValues.back, userEmail: currentUser?.email, deckID: deckId })
             });
 
-            console.log("Response status:", response.status); // Add this line
-            console.log("Response headers:", response.headers); // Add this line
-
 
             const data = await response.json();
-
-            console.log("Response data:", data); // Add this line
 
 
             if (response.ok) {
@@ -232,11 +222,8 @@ function DeckPage() {
                     front: formValues.front,
                     back: formValues.back
                 };
-                console.log("🆕 Adding new card to state:", newCard);
                 setCards(prevCards => {
-                    console.log("📦 Previous cards:", prevCards);
                     const updated = [...prevCards, newCard];
-                    console.log("📦 Updated cards:", updated);
                     return updated;
                 });
                 setFormValues({ front: "", back: "" });
