@@ -75,7 +75,11 @@ exports.generateFlashcards = async (req, res) => {
         for (let i = 0; i < flashcards.length; i++) {
             const flashcard = flashcards[i];
 
-            const cardData = { cardID: Date.now() + i, deckID: deckID, userEmail: userEmail, qSide: flashcard.question, 
+            const cardData = { 
+                cardID: Date.now() + i, 
+                deckID: deckID, 
+                userEmail: userEmail, 
+                qSide: flashcard.question, 
                 aSide: flashcard.answer
             };
 

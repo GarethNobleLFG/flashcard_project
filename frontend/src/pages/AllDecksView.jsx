@@ -54,7 +54,7 @@ function AllDecksView() {
     }, [currentUser?.email, setDecks]);
 
 
-    
+
     // handle form input changes
     const handleChange = (field, value) => {
         setFormValues({ ...formValues, [field]: value });
@@ -89,8 +89,12 @@ function AllDecksView() {
             const data = await response.json();
 
             if (response.ok) {
-                addDeck({ id: data.deck.deckID, name: trimmedName, description: formValues.description, cardCount: 0, });
-                setFormValues({ name: "", description: "" });
+                setDecks(prevDecks => [...prevDecks, {
+                    id: data.deck.deckID,
+                    name: trimmedName,
+                    description: formValues.description,
+                    cardCount: 0
+                }]); setFormValues({ name: "", description: "" });
                 setShowForm(false);
                 console.log("Deck created successfully!", data);
             } else {
