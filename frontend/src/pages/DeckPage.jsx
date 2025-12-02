@@ -288,6 +288,7 @@ function DeckPage() {
         }
     };
 
+
     const handleToggleFavorite = async () => {
         if (!currentDeckId) return;
 
@@ -296,58 +297,6 @@ function DeckPage() {
         setIsFavorite(!isFavorite);
 
         try {
-            const response = await fetch(`http://localhost:5000/api/cards/generate`, {
-                method: 'POST',
-                body: formData,
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                const loadCards = async () => {
-                    try {
-                        const cardsResponse = await fetch(`http://localhost:5000/api/cards/${deckId}?userEmail=${encodeURIComponent(currentUser.email)}`, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            }
-                        });
-
-
-                        if (cardsResponse.ok) {
-                            const cardsData = await cardsResponse.json();
-                            const mappedCards = cardsData.map(card => ({
-                                id: card.cardID,
-                                front: card.qSide,
-                                back: card.aSide
-                            }));
-
-                            console.log("✅ Setting cards:", mappedCards);
-                            setCards(mappedCards);
-                        }
-                        else if (cardsResponse.status === 404 || cardsResponse.status === 400) {
-                            setCards([]);
-                        }
-                        else {
-                            const errorData = await cardsResponse.json();
-                            alert(`Error: ${errorData.error}`);
-                        }
-
-
-                    }
-                    catch (error) {
-                        console.error('Error reloading cards: ', error);
-                    }
-                }
-
-
-                await loadCards();
-                alert(`Successfully generated ${data.flashcards.length} flashcards!`);
-            }
-            else {
-                alert(`Error: ${data.error}`);
-            }
-
             const fav = await toggleFavorite(currentDeckId);
             console.log("Favorite toggled successfully:", fav);
         } catch (error) {
@@ -356,7 +305,8 @@ function DeckPage() {
             // Revert on error
             setIsFavorite(currentFavorite);
         }
-    };
+    }
+
 
     const handleDeleteCard = async (cardId) => {
         if (!window.confirm("Are you sure you want to delete this card?")) {
@@ -379,58 +329,58 @@ function DeckPage() {
     };
 
     return (
-    <div className="deck-page">
-        <Link to="/dashboard" className="back-button">← Back to All Decks</Link>
+        <div className="deck-page">
+            <Link to="/dashboard" className="back-button">← Back to All Decks</Link>
 
-        <h1>{deckName}</h1>
-        <button onClick={() => setShowForm(true)}>+ Add Card</button>
+            <h1>{deckName}</h1>
+            <button onClick={() => setShowForm(true)}>+ Add Card</button>
 
-        <button
-            onClick={() => setShowPDFModal(true)}
-            className="btn-pdf"
-        >
-            + Generate Cards From PDF (AI Powered)
-        </button>
+            <button
+                onClick={() => setShowPDFModal(true)}
+                className="btn-pdf"
+            >
+                + Generate Cards From PDF (AI Powered)
+            </button>
 
-        <button
-            onClick={handleToggleFavorite}
-            className={isFavorite ? "btn-favorite-active" : "btn-favorite"}
-        >
-            {isFavorite ? "★ Favorited" : "☆ Favorite"}
-        </button>
-
-
-        {showForm && (
-            <AddItemForm
-                fields={[
-                    { name: "front", placeholder: "Card Front" },
-                    { name: "back", placeholder: "Card Back" },
-                ]}
-                values={formValues}
-                onChange={(field, value) => setFormValues({ ...formValues, [field]: value })}
-                onSubmit={handleAdd}
-                onCancel={() => setShowForm(false)}
-            />
-        )}
+            <button
+                onClick={handleToggleFavorite}
+                className={isFavorite ? "btn-favorite-active" : "btn-favorite"}
+            >
+                {isFavorite ? "★ Favorited" : "☆ Favorite"}
+            </button>
 
 
-        <PDFModal
-            isOpen={showPDFModal}
-            onClose={() => setShowPDFModal(false)}
-            onSubmit={handlePDFSubmit}
-        />
-
-        <div className="cards-grid">
-            {cards.map((card) => (
-                <EditableCard
-                    key={card.id}
-                    card={card}
-                    onDelete={() => handleDeleteCard(card.id)}
-                    onSave={(updated) => handleEdit(card.id, updated)}
+            {showForm && (
+                <AddItemForm
+                    fields={[
+                        { name: "front", placeholder: "Card Front" },
+                        { name: "back", placeholder: "Card Back" },
+                    ]}
+                    values={formValues}
+                    onChange={(field, value) => setFormValues({ ...formValues, [field]: value })}
+                    onSubmit={handleAdd}
+                    onCancel={() => setShowForm(false)}
                 />
-            ))}
+            )}
+
+
+            <PDFModal
+                isOpen={showPDFModal}
+                onClose={() => setShowPDFModal(false)}
+                onSubmit={handlePDFSubmit}
+            />
+
+            <div className="cards-grid">
+                {cards.map((card) => (
+                    <EditableCard
+                        key={card.id}
+                        card={card}
+                        onDelete={() => handleDeleteCard(card.id)}
+                        onSave={(updated) => handleEdit(card.id, updated)}
+                    />
+                ))}
+            </div>
         </div>
-    </div>
     );
 }
 
