@@ -12,7 +12,7 @@ import AddItemForm from "../components/AddItemForm";
 import Footer from "../components/Footer";
 import useDeckActions from "../hooks/useDeckActions";
 import useCardActions from "../hooks/useCardActions";
-import { getUserID } from '../user/getUserFromToken';
+import { getUserID } from '../get-user-info/getUserFromToken';
 
 
 function EditableCard({ card, onDelete, onSave }) {
