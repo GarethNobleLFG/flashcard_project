@@ -7,7 +7,8 @@ import AddItemForm from "../components/AddItemForm";
 import "../styles/AllDecksView.css";
 import Footer from "../components/Footer";
 import useDeckActions from "../hooks/useDeckActions";
-import { getUserID } from "../user/getUserFromToken";
+import { getUserID } from "../get-user-info/getUserFromToken";
+import QuizFeature from '../quiz-feature/QuizFeature';
 
 
 function AllDecksView() {
@@ -30,6 +31,17 @@ function AllDecksView() {
     // state for showing add deck form and form values
     const [showForm, setShowForm] = useState(false); // State to control form visibility
     const [formValues, setFormValues] = useState({ name: "" });
+
+
+    //  States for Quiz Feature.
+    const [showQuiz, setShowQuiz] = useState(false);
+    const [selectedDeck, setSelectedDeck] = useState(null);
+
+    //  Handling Quiz Feature start.
+    const handleStartQuiz = (deck) => {
+        setSelectedDeck(deck);
+        setShowQuiz(true);
+    };
 
 
 
@@ -206,9 +218,20 @@ function AllDecksView() {
                                 {/* Card count not supported by backend currently */}
                             </div>
                             <div className="deck-card-footer">
+
                                 <Link to={`/dashboard/deck/${encodeURIComponent(deck.name)}`} className="view-btn">
                                     Open
                                 </Link>
+
+
+                                <button
+                                    className="quiz-btn"
+                                    onClick={() => handleStartQuiz(deck)}
+                                >
+                                    Quiz!
+                                </button>
+
+
                                 <button
                                     className="delete-btn"
                                     onClick={() => handleDeleteDeck(deck.id)}
@@ -220,6 +243,25 @@ function AllDecksView() {
                     ))
                 )}
             </div>
+
+
+
+            {showQuiz && (
+                <div className="quiz-modal">
+                    <div className="quiz-modal-content">
+                        <button
+                            className="close-quiz-btn"
+                            onClick={() => setShowQuiz(false)}
+                        >
+                            ✕
+                        </button>
+                        <QuizFeature deck={ selectedDeck }/>
+                    </div>
+                </div>
+            )}
+
+
+
         </div>
     );
 }
