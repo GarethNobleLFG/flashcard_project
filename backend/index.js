@@ -15,16 +15,43 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 // Allows Use Of Following Connections.
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'http://localhost:5173',
-    'https://flashcard-project-frontend-kzltgwfvv-garethnoblelfgs-projects.vercel.app',
-    /^https:\/\/flashcard-project-frontend-.*\.vercel\.app$/
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, etc.)
+    if (!origin) {
+      return callback(null, true);
+    } 
+
+    // Allow localhost for development
+    if (origin.includes('localhost')) {
+      return callback(null, true);
+    } 
+
+    // Allow any Vercel deployment
+    if (origin.includes('vercel.app')) {
+      return callback(null, true);
+    }
+
+    // Allow specific domains
+    const allowedOrigins = [
+      'https://flashcard-project-frontend-dugfq8fu6-garethnoblelfgs-projects.vercel.app',
+      /^https:\/\/flashcard-project-frontend-.*\.vercel\.app$/
+    ];
+
+    const isAllowed = allowedOrigins.some(pattern => {
+      if (typeof pattern === 'string') {
+        return origin === pattern;
+      } 
+      else {
+        return pattern.test(origin);
+      }
+    });
+
+    callback(null, isAllowed);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
-})); 
+}));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
