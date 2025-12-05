@@ -69,7 +69,7 @@ app.get('/', (req, res) => {
 
 
 
-// Connect to MongoDB (for serverless functions)
+// Connect To MongoDB 
 let isConnected = false;
 
 const connectToDatabase = async () => {
@@ -82,12 +82,8 @@ const connectToDatabase = async () => {
     console.log('MONGODB_URI exists:', !!MONGODB_URI);
 
     await mongoose.connect(MONGODB_URI, {
-      serverSelectionTimeoutMS: 10000, // Increased to 10 seconds
-      socketTimeoutMS: 45000,
-      bufferCommands: false,
-      bufferMaxEntries: 0,
-      maxPoolSize: 10, // Limit connection pool
-      minPoolSize: 5
+      serverSelectionTimeoutMS: 10000,
+      socketTimeoutMS: 45000
     });
 
     isConnected = true;
