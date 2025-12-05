@@ -49,7 +49,10 @@ catch (error) {
   console.error('Error loading routes:', error);
 }
 
-
+// Test Route.
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Test route works!', timestamp: new Date() });
+});
 
 
 
