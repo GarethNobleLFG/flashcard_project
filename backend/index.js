@@ -42,9 +42,9 @@ try {
   app.use('/api/users', userRoutes);
   app.use('/api/cards', cardRoutes);
   app.use('/api/decks', deckRoutes);
-  
+
   console.log('Routes loaded successfully');
-} 
+}
 catch (error) {
   console.error('Error loading routes:', error);
 }
@@ -78,16 +78,23 @@ const connectToDatabase = async () => {
   }
 
   try {
-    await mongoose.connect(MONGODB_URI);
+    await mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+      bufferCommands: false,
+      bufferMaxEntries: 0
+    });
     isConnected = true;
     console.log('Connected to MongoDB');
 
-    // Drop the old userID index if it exists
     try {
       await mongoose.connection.db.collection('users').dropIndex('userID_1');
-    } catch (err) {
     }
-  } catch (error) {
+    catch (err) {
+      // Index might not exist, that's fine
+    }
+  }
+  catch (error) {
     console.error('MongoDB connection error:', error);
     throw error;
   }
