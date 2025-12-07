@@ -61,18 +61,6 @@ app.get('/', (req, res) => {
 
 
 
-// Ping Endpoint To Keep Functions Warm.
-app.get('/ping', (req, res) => {
-  res.json({ 
-    status: 'alive', 
-    timestamp: new Date(),
-    memory: process.memoryUsage(),
-    uptime: process.uptime()
-  });
-});
-
-
-
 
 // Connect To MongoDB. 
 async function connectToDatabase() {
