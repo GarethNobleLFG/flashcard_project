@@ -84,12 +84,12 @@ async function connectToDatabase() {
       socketTimeoutMS: 45000
     });
     
-    console.log("✅ Connected to MongoDB successfully");
+    console.log("Connected to MongoDB successfully");
 
     return mongoose.connection;
   } 
   catch (error) {
-    console.error("❌ MongoDB connection failed:", error);
+    console.error(" MongoDB connection failed:", error);
     throw error;
   }
 }
