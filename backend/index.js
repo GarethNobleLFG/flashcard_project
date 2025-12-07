@@ -23,41 +23,29 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-// Connect To MongoDB. 
-let isConnected = false;
 
-const connectToDatabase = async () => {
-  if (isConnected) {
-    return;
-  }
-
-  try {
-    await mongoose.connect(process.env.MONGODB_URI, {
-      serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 45000
-    });
-
-    isConnected = true;
-    console.log('✅ Connected to MongoDB successfully');
-  } catch (error) {
-    isConnected = false;
-    throw new Error(`Database connection failed: ${error.message}`);
-  }
-};
-
-
-
+// Connect To MongoDB. Protects Against Test Envrionment.
 if (process.env.NODE_ENV !== 'test') {
-  // Middleware to ensure database connection
+  let isConnected = false;
+
   app.use(async (req, res, next) => {
-    try {
-      await connectToDatabase();
-      next();
-    } catch (error) {
-      res.status(500).json({ error: 'Database connection failed' });
+    if (!isConnected) {
+      try {
+        await mongoose.connect(process.env.MONGODB_URI, {
+          serverSelectionTimeoutMS: 10000,
+          socketTimeoutMS: 45000
+        });
+        isConnected = true;
+        console.log('✅ Connected to MongoDB successfully');
+      } 
+      catch (error) {
+        return res.status(500).json({ error: 'Database connection failed' });
+      }
     }
+    next();
   });
 }
+
 
 
 
